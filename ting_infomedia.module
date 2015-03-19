@@ -80,6 +80,8 @@ function ting_infomedia_get_ting_relations() {
   if (!$types) {
     $types = array(
       'dbcaddi:hasOnlineAccess' => t('Article from Infomedia'),
+      "dbcaddi:hasReview" => t('Infomedia review'),
+      'dbcaddi:isReviewOf' => t('is review off'),
     );
   }
   return $types;
@@ -90,7 +92,8 @@ function ting_infomedia_ding_anchor_info() {
   // We need to know what kind of hasOnlineAccess
   // is provided with this object and return relevant anchor information.
   $object = menu_get_object('ting_object', 2);
-  if ($object->getAc_source() != 'Artikler') {
+  if ($object->getAc_source() != 'Artikler' && $object->getAc_source() != 'AvisArtikler'
+      && $object->getAc_source() != 'Anmeldelse') {
     unset($relations['dbcaddi:hasOnlineAccess']);
   }
   return $relations;
@@ -121,14 +124,21 @@ function ting_infomedia_parse_article($id) {
     return ting_infomedia_parse_for_errors($obj);
   }
   else {
-    foreach($obj->parts as $part=>$val) {
-      if($message = ting_infomedia_parse_for_article_error($val) ) {
-        $val['article'] = $message;
+      if(sizeof($obj->parts) == 0)
+      {
+        $html = t("Infomedia: Desværre modtog vi et tomt svar. Prøv eventuelt at søge på bibliotek.dk eller hvis fejlen forbliver"
+                . " Kontakt os på #Mail#");   
+      }else{
+          foreach($obj->parts as $part=>$val) {
+            if($message = ting_infomedia_parse_for_article_error($val) ) {
+              $val['article'] = $message;
+            }
+            $html = $val['article'];
+            // for now simply return the first article. TODO handle more articles
+            ting_infomedia_clean_html($html);
+          }
       }
-      $html = $val['article'];
-      // for now simply return the first article. TODO handle more articles
-      ting_infomedia_clean_html($html);
-    }
+    
   }
   return $html;
 }
