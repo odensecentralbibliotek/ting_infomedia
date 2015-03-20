@@ -91,7 +91,6 @@ function ting_infomedia_field_formatter_view($entity_type, $entity, $field, $ins
   }
   return $element;
 }
-
 /**
  * Parse the entityid and return an url
  *
