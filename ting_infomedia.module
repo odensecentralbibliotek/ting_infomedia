@@ -126,8 +126,9 @@ function ting_infomedia_parse_article($id) {
   else {
       if(sizeof($obj->parts) == 0)
       {
-        $html = t("Infomedia: Desværre modtog vi et tomt svar. Prøv eventuelt at søge på bibliotek.dk eller hvis fejlen forbliver"
-                . " Kontakt os på #Mail#");   
+        $Bibdk_searchstring = "https://bibliotek.dk/da/search/work?search_block_form=" . $id;
+        $html = str_replace('%1',$Bibdk_searchstring,t("Infomedia: Desværre var der ikke online adgang til denne resource. Du kan muligvis bestille artiklen fysisks gennem"
+                . "bibliotek.dk <a target='_blank' href='%1'>her</a> "));   
       }else{
           foreach($obj->parts as $part=>$val) {
             if($message = ting_infomedia_parse_for_article_error($val) ) {
