@@ -124,12 +124,13 @@ function ting_infomedia_parse_article($id) {
     return ting_infomedia_parse_for_errors($obj);
   }
   else {
-      if(sizeof($obj->parts) == 0)
+      $first_part = reset($obj->parts);
+      if(sizeof($obj->parts) == 0 || $first_part['verified'] == false)
       {
-        $Bibdk_searchstring = "https://bibliotek.dk/da/search/work?search_block_form=" . $id;
+        $Bibdk_searchstring = "https://bibliotek.dk/da/search/work?search_block_form=" . $id; 
         $html = str_replace('%1',$Bibdk_searchstring,t("Infomedia: Desværre var der ikke online adgang til denne resource. Du kan muligvis bestille artiklen fysisks gennem"
                 . "bibliotek.dk <a target='_blank' href='%1'>her</a> "));   
-      }else{
+      }else{ 
           foreach($obj->parts as $part=>$val) {
             if($message = ting_infomedia_parse_for_article_error($val) ) {
               $val['article'] = $message;
