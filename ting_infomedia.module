@@ -131,8 +131,15 @@ function ting_infomedia_form_ting_admin_ting_settings_alter(&$form, &$form_state
 function ting_infomedia_parse_article($id) {
   $html = FALSE;
   $obj = ting_infomedia_get_article($id);
-
-  if( !empty($obj->error)) {
+  if($obj->error == "borrower_not_in_municipality") {
+    drupal_set_message(t('Bibliotekets e-ressourcer kan kun anvendes, hvis du bor i kommunen.'), 'warning');
+        return array(
+      '#prefix' => '<div class="infomedia_error">',
+      '#suffix' => '</div>',
+      '#theme' => 'status_messages',
+    );
+  }
+  elseif (!empty($obj->error)) {
     return ting_infomedia_parse_for_errors($obj);
   }
   else {
