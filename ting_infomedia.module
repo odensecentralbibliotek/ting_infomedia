@@ -22,9 +22,10 @@ function ting_infomedia_menu() {
 */
 
 /**
- * Page callback function
+ * Page callback function.
  *
- * Return a render array
+ * @return array
+ *   Page render array.
  */
 function ting_infomedia_view($id) {
   global $user;
@@ -40,7 +41,7 @@ function ting_infomedia_view($id) {
 
   $render_array = ting_infomedia_parse_article($id);
   return array(
-    '#markup' => '<div id="article-wrapper">' . render($render_array). '</div>',
+    '#markup' => '<div id="article-wrapper">' . render($render_array) . '</div>',
     '#theme' => 'ting_infomedia_article',
     '#attached' => array(
       'css' => array(drupal_get_path('module', 'ting_infomedia') . '/ting_infomedia_article_view.css'),
